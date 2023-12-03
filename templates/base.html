@@ -1,0 +1,24 @@
+<!-- templates/base.html or any other templates that include navigation links -->
+<!-- ... -->
+<nav>
+    <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('register') }}">Register</a></li>
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        <li><a href="{{ url_for('product_catalog') }}">Product Catalog</a></li>
+        <!-- Add other navigation links as needed -->
+    </ul>
+</nav>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <!-- ... (existing content) -->
+</body>
+<!-- ... -->

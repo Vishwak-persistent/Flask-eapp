@@ -1,0 +1,62 @@
+<!-- templates/payment.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+</head>
+<body>
+    <h2>Payment</h2>
+    {% if products %}
+        <ul>
+            {% for product in products %}
+                <li>{{ product.name }} - ${{ product.amount }}</li>
+            {% endfor %}
+        </ul>
+        <p>Total Amount: ${{ total_amount }}</p>
+        <form method="post" action="{{ url_for('payment') }}" id="payment-form">
+            <script src="https://js.stripe.com/v3/"></script>
+            <input type="hidden" name="total_amount" value="{{ total_amount }}">
+            <div id="card-element"></div>
+            <!-- Used to display form errors -->
+            <div id="card-errors" role="alert"></div>
+            <button id="card-button" type="button">Pay Now</button>
+        </form>
+        <script>
+            var stripe = Stripe('your_stripe_public_key');
+            var elements = stripe.elements();
+            var cardElement = elements.create('card');
+            cardElement.mount('#card-element');
+            var cardButton = document.getElementById('card-button');
+            var form = document.getElementById('payment-form');
+            var cardErrors = document.getElementById('card-errors');
+
+            cardButton.addEventListener('click', function () {
+                stripe.createPaymentMethod({
+                    type: 'card',
+                    card: cardElement,
+                }).then(function (result) {
+                    if (result.error) {
+                        // Display errors to the user
+                        cardErrors.textContent = result.error.message;
+                    } else {
+                        // Add the PaymentMethod ID to the form
+                        var hiddenInput = document.createElement('input');
+                        hiddenInput.setAttribute('type', 'hidden');
+                        hiddenInput.setAttribute('name', 'payment_method_id');
+                        hiddenInput.setAttribute('value', result.paymentMethod.id);
+                        form.appendChild(hiddenInput);
+
+                        // Submit the form
+                        form.submit();
+                    }
+                });
+            });
+        </script>
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
+</body>
+</html>

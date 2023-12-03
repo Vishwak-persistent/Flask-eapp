@@ -1,0 +1,24 @@
+<!-- templates/cart.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+</head>
+<body>
+    <h2>Your Shopping Cart</h2>
+    {% if products %}
+        <ul>
+            {% for product in products %}
+                <li>{{ product.name }} - ${{ product.amount }}</li>
+            {% endfor %}
+        </ul>
+        <p>Total Amount: ${{ total_amount }}</p>
+        <a href="{{ url_for('payment') }}">Proceed to Payment</a>
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
+</body>
+</html>

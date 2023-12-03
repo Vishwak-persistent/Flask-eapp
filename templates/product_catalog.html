@@ -1,0 +1,29 @@
+<!-- templates/product_catalog.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Catalog</title>
+</head>
+<body>
+    <h2>Product Catalog</h2>
+    {% for product in products %}
+    <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px;">
+        <h3>{{ product.name }}</h3>
+        <p><strong>Amount:</strong> ${{ product.amount }}</p>
+        {% if product.images %}
+            <p><strong>Images:</strong> <img src="{{ product.images }}" alt="{{ product.name }}" style="max-width: 200px;"></p>
+        {% endif %}
+        {% if product.description %}
+            <p><strong>Description:</strong> {{ product.description }}</p>
+        {% endif %}
+        <!-- Add an "Add to Cart" button with a link to the add_to_cart route -->
+        <form method="post" action="{{ url_for('add_to_cart', product_id=product.id) }}">
+            <input type="submit" value="Add to Cart">
+        </form>
+    </div>
+{% endfor %}
+</body>
+</html>
